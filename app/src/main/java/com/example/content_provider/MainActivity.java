@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private static final int PERMISSION_REQUEST_CODE = 2;
-    Button btnshowallcontact, btnaccesscalllog, btnaccessmediastore, btnshowmessages;
+    Button btnshowallcontact, btnaccesscalllog, btnshowmessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +28,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         btnshowallcontact = findViewById(R.id.btnshowallcontact);
         btnaccesscalllog = findViewById(R.id.btnaccesscalllog);
-        btnaccessmediastore = findViewById(R.id.btnmediastore);
         btnshowmessages = findViewById(R.id.btnshowmessages);
 
         btnshowallcontact.setOnClickListener(this);
         btnaccesscalllog.setOnClickListener(this);
-        btnaccessmediastore.setOnClickListener(this);
         btnshowmessages.setOnClickListener(this);
     }
 
@@ -48,13 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
             }
-        } else if (v == btnaccessmediastore) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                accessMediaStore();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
-            }
-        } else if (v == btnshowmessages) {
+        }else if (v == btnshowmessages) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
                 displayMessages();
             } else {
@@ -69,8 +61,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             accessTheCallLog();
         } else if (requestCode == 2 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            accessMediaStore();
-        } else if (requestCode == 3 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             displayMessages();
         } else {
             Toast.makeText(this, "Quyền bị từ chối", Toast.LENGTH_SHORT).show();
@@ -99,26 +89,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 .show();
     }
 
-    public void accessMediaStore() {
-        String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.MIME_TYPE};
-        Cursor c = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
-        StringBuilder s = new StringBuilder();
-
-        if (c != null) {
-            while (c.moveToNext()) {
-                s.append("Tên file: ").append(c.getString(0))
-                        .append("\nNgày thêm: ").append(c.getString(1))
-                        .append("\nLoại file: ").append(c.getString(2)).append("\n\n");
-            }
-            c.close();
-        }
-
-        new AlertDialog.Builder(this)
-                .setTitle("Danh sách Media")
-                .setMessage(s.toString().isEmpty() ? "Không có file media nào" : s.toString())
-                .setPositiveButton("Đóng", null)
-                .show();
-    }
 
     public void displayMessages() {
         Cursor cursor = getContentResolver().query(Telephony.Sms.Inbox.CONTENT_URI, null, null, null, null);

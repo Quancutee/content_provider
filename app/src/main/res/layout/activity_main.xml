@@ -33,15 +33,6 @@
         android:layout_marginBottom="10dp"/>
 
     <Button
-        android:id="@+id/btnmediastore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Truy cập Media Store"
-        android:background="@drawable/radius_buttom"
-        android:layout_marginBottom="10dp"/>
-
-    <!-- Button mới để hiển thị tin nhắn -->
-    <Button
         android:id="@+id/btnshowmessages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

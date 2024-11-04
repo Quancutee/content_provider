@@ -32,7 +32,6 @@ public class ShowAllContactActivity extends Activity {
         btnback = findViewById(R.id.btnback);
         btnback.setOnClickListener(v -> finish());
 
-        // Kiểm tra quyền truy cập danh bạ
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             showAllContacts();
         } else {
@@ -41,7 +40,7 @@ public class ShowAllContactActivity extends Activity {
         }
     }
 
-    // Hàm lấy danh bạ
+
     public void showAllContacts() {
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
         ArrayList<String> list = new ArrayList<>();
@@ -54,7 +53,7 @@ public class ShowAllContactActivity extends Activity {
                     String s = id + " - " + name;
                     list.add(s);
                 } catch (Exception e) {
-                    e.printStackTrace(); // Ghi log lỗi nếu có
+                    e.printStackTrace();
                 }
             }
             c1.close();
@@ -64,7 +63,6 @@ public class ShowAllContactActivity extends Activity {
         lv.setAdapter(adapter);
     }
 
-    // Xử lý kết quả yêu cầu quyền truy cập
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -72,7 +70,7 @@ public class ShowAllContactActivity extends Activity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showAllContacts();
             } else {
-                Toast.makeText(this, "Permission denied to read contacts", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Quyền bị từ chối", Toast.LENGTH_SHORT).show();
             }
         }
     }
